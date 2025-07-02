@@ -15,3 +15,7 @@ spring:
       write-dates-as-timestamps: false
 server:
   port: 8080
+
+liquibase:
+  enabled: true
+  change-log: classpath:db/changelog/db.changelog-master.yaml
