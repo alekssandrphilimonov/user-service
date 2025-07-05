@@ -45,4 +45,8 @@ public class UserService {
 
         return new PageImpl<>(content, pageable, filtered.size());
     }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+    }
 }

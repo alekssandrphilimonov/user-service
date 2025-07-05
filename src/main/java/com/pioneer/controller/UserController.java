@@ -2,6 +2,7 @@ package com.pioneer.controller;
 
 import com.pioneer.dto.UserDto;
 import com.pioneer.dto.UserFilter;
+import com.pioneer.model.User;
 import com.pioneer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -39,8 +41,19 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<String> getCurrentUser(HttpServletRequest request) {
-        String login = (String) request.getAttribute("userLogin");
-        return ResponseEntity.ok("Текущий пользователь: " + login);
+    public ResponseEntity<UserDto> getCurrentUser(HttpServletRequest request) {
+        String userId = (String) request.getAttribute("userLogin");
+
+        User user = userService.findById(Long.parseLong(userId));
+        UserDto dto = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .dateOfBirth(user.getDateOfBirth())
+                .emails(user.getEmails().stream().map(e -> e.getEmail()).collect(Collectors.toList()))
+                .phones(user.getPhones().stream().map(p -> p.getPhone()).collect(Collectors.toList()))
+                .build();
+
+        return ResponseEntity.ok(dto);
     }
+
 }
