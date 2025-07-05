@@ -31,3 +31,10 @@ logging:
 
 jwt:
   secret: bXlTZWNyZXRLZXk=
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+

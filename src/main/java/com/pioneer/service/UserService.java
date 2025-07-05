@@ -2,6 +2,7 @@ package com.pioneer.service;
 
 import com.pioneer.dto.UserDto;
 import com.pioneer.dto.UserFilter;
+import com.pioneer.model.Account;
 import com.pioneer.model.User;
 import com.pioneer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AccountService accountService;
 
     public Page<UserDto> searchUsers(UserFilter filter, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -47,6 +51,29 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional
+    public void transfer(Long fromUserId, Long toUserId, BigDecimal value) {
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Transfer amount must be positive");
+        }
+
+        Account fromAccount = accountService.findByUserId(fromUserId)
+                .orElseThrow(() -> new RuntimeException("Sender account not found"));
+
+        Account toAccount = accountService.findByUserId(toUserId)
+                .orElseThrow(() -> new RuntimeException("Recipient account not found"));
+
+        if (fromAccount.getBalance().compareTo(value) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }
+
+        fromAccount.setBalance(fromAccount.getBalance().subtract(value));
+        toAccount.setBalance(toAccount.getBalance().add(value));
+
+        accountService.save(fromAccount);
+        accountService.save(toAccount);
     }
 }
