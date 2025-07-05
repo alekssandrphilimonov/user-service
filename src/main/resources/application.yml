@@ -13,13 +13,18 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
+
 server:
   port: 8080
 
 liquibase:
   enabled: true
   change-log: classpath:db/changelog/db.changelog-master.yaml
+
 logging:
   level:
     root: INFO
     com.pioneer: DEBUG
+
+jwt:
+  secret: bXlTZWNyZXRLZXk=
