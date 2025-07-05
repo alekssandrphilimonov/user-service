@@ -17,7 +17,7 @@ public class BalanceScheduler {
 
     private final AccountRepository accountRepository;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 30000)
     public void increaseBalance() {
         List<Account> accounts = accountRepository.findAll();
         for (Account account : accounts) {
