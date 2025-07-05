@@ -19,3 +19,7 @@ server:
 liquibase:
   enabled: true
   change-log: classpath:db/changelog/db.changelog-master.yaml
+logging:
+  level:
+    root: INFO
+    com.pioneer: DEBUG
