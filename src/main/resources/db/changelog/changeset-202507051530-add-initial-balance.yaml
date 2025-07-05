@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-initial-balance-to-account
+      author: aleksandrЖ
+      changes:
+        - addColumn:
+            tableName: account
+            columns:
+              - column:
+                  name: initial_balance
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+        - sql:
+            comment: Copy existing balance to initial_balance for all accounts
+            sql: UPDATE account SET initial_balance = balance;

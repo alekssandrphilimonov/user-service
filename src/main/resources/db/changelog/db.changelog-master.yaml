@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changeset-202507021901-init-schema.yaml
+  - include:
+      file: db/changelog/changeset-202507051530-add-initial-balance.yaml
