@@ -4,7 +4,7 @@ databaseChangeLog:
       author: aleksandr
       changes:
         - createTable:
-            tableName: user
+            tableName: users
             columns:
               - column:
                   name: id
@@ -48,7 +48,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: account
             baseColumnNames: user_id
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_account_user
 
@@ -76,7 +76,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: email_data
             baseColumnNames: user_id
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_email_user
 
@@ -104,6 +104,6 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: phone_data
             baseColumnNames: user_id
-            referencedTableName: user
+            referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_phone_user
